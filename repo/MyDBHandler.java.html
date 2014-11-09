@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>MyDBHandler.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(204,120,50); }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(104,151,187); }
+.s3 { color: rgb(106,135,89); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+MyDBHandler.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.grant.financialfreedomgrant</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteOpenHelper</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.content.Context</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.content.ContentValues</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">import </span><span class="s1">android.database.Cursor</span><span class="s0">;</span><span class="s1"> 
+ 
+</span><span class="s0">public class </span><span class="s1">MyDBHandler </span><span class="s0">extends </span><span class="s1">SQLiteOpenHelper{ 
+ 
+    </span><span class="s0">private static final int </span><span class="s1">DATABASE_VERSION = </span><span class="s2">1</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">private static final </span><span class="s1">String DATABASE_NAME = </span><span class="s3">&quot;userDB.db&quot;</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">private static final </span><span class="s1">String TABLE_USERS = </span><span class="s3">&quot;users&quot;</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s0">public static final </span><span class="s1">String COLUMN_ID = </span><span class="s3">&quot;userName&quot;</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">public static final </span><span class="s1">String COLUMN_USERINCOME = </span><span class="s3">&quot;userIncome&quot;</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">public static final </span><span class="s1">String COLUMN_USEREXPENSES = </span><span class="s3">&quot;userExpenses&quot;</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s0">public </span><span class="s1">MyDBHandler(Context context</span><span class="s0">, </span><span class="s1">String name</span><span class="s0">, </span><span class="s1">SQLiteDatabase.CursorFactory factory</span><span class="s0">, int </span><span class="s1">version){ 
+        </span><span class="s0">super</span><span class="s1">(context</span><span class="s0">, </span><span class="s1">DATABASE_NAME</span><span class="s0">, </span><span class="s1">factory</span><span class="s0">, </span><span class="s1">DATABASE_VERSION)</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onCreate(SQLiteDatabase db){ 
+        String CREATE_USERS_TABLE = </span><span class="s3">&quot;CREATE TABLE &quot; </span><span class="s1">+ TABLE_USERS + </span><span class="s3">&quot;(&quot; </span><span class="s1">+ COLUMN_ID + </span><span class="s3">&quot; INTEGER PRIMARY KEY,&quot; </span><span class="s1">+ COLUMN_ID + </span><span class="s3">&quot; TEXT,&quot; </span><span class="s1">+ COLUMN_USERINCOME + COLUMN_USEREXPENSES + </span><span class="s3">&quot; INTEGER&quot; </span><span class="s1">+ </span><span class="s3">&quot;)&quot;</span><span class="s0">;</span><span class="s1"> 
+        db.execSQL(CREATE_USERS_TABLE)</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onUpgrade(SQLiteDatabase db</span><span class="s0">, int </span><span class="s1">oldVersion</span><span class="s0">, int </span><span class="s1">newVersion){ 
+        db.execSQL(</span><span class="s3">&quot;DROP TABLE IF EXISTS &quot; </span><span class="s1">+ TABLE_USERS)</span><span class="s0">;</span><span class="s1"> 
+        onCreate(db)</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">addUser(User user){ 
+        ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues()</span><span class="s0">;</span><span class="s1"> 
+        values.put(COLUMN_USERINCOME</span><span class="s0">, </span><span class="s1">user.getUserIncome())</span><span class="s0">;</span><span class="s1"> 
+        values.put(COLUMN_USEREXPENSES</span><span class="s0">, </span><span class="s1">user.getUserExpenses())</span><span class="s0">;</span><span class="s1"> 
+ 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase()</span><span class="s0">;</span><span class="s1"> 
+ 
+        db.insert(TABLE_USERS</span><span class="s0">, null, </span><span class="s1">values)</span><span class="s0">;</span><span class="s1"> 
+        db.close()</span><span class="s0">;</span><span class="s1"> 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">User findUser(String userName){ 
+        String query = </span><span class="s3">&quot;Select * FROM &quot; </span><span class="s1">+ TABLE_USERS + </span><span class="s3">&quot; WHERE &quot; </span><span class="s1">+ COLUMN_ID + </span><span class="s3">&quot; = </span><span class="s0">\&quot;</span><span class="s3">&quot; </span><span class="s1">+ userName + </span><span class="s3">&quot;</span><span class="s0">\&quot;</span><span class="s3">&quot;</span><span class="s0">;</span><span class="s1"> 
+ 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase()</span><span class="s0">;</span><span class="s1"> 
+ 
+        Cursor cursor = db.rawQuery(query</span><span class="s0">, null</span><span class="s1">)</span><span class="s0">;</span><span class="s1"> 
+ 
+        User user = </span><span class="s0">new </span><span class="s1">User()</span><span class="s0">;</span><span class="s1"> 
+ 
+        </span><span class="s0">if </span><span class="s1">(cursor.moveToFirst()){ 
+            cursor.moveToFirst()</span><span class="s0">;</span><span class="s1"> 
+            user.setUserName(cursor.getString(</span><span class="s2">0</span><span class="s1">))</span><span class="s0">;</span><span class="s1"> 
+            user.setUserIncome(Double.parseDouble(cursor.getString(</span><span class="s2">1</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+            user.setUserExpenses(Double.parseDouble(cursor.getString(</span><span class="s2">2</span><span class="s1">)))</span><span class="s0">;</span><span class="s1"> 
+            cursor.close()</span><span class="s0">;</span><span class="s1"> 
+        } </span><span class="s0">else </span><span class="s1">{ 
+            user = </span><span class="s0">null;</span><span class="s1"> 
+        } 
+        db.close()</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">return </span><span class="s1">user</span><span class="s0">;</span><span class="s1"> 
+    } 
+} 
+</span></pre>
+</body>
+</html>
